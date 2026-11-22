@@ -1,0 +1,14 @@
+{
+  "extName": { "message": "QRbeam" },
+  "extDescription": { "message": "Shows the address of the current tab as a large QR code. Made for projectors." },
+  "actionTitle": { "message": "Show address as QR code" },
+  "dialogLabel": { "message": "Address and QR code" },
+  "shorten": { "message": "Shorten link" },
+  "shortening": { "message": "Shortening…" },
+  "shortenFailed": { "message": "Couldn’t shorten link" },
+  "undo": { "message": "Undo" },
+  "close": { "message": "Close" },
+  "escToClose": { "message": "to close" },
+  "qrLabel": { "message": "QR code" },
+  "noAddress": { "message": "This page has no address that can be shared." }
+}

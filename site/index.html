@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>QRbeam</title>
+<meta name="description" content="A browser extension that shows the current address as a large QR code. Made for projectors.">
+<link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+<style>
+  :root {
+    --bg: #f9f9fb; --surface: #ffffff; --fg: #15141a; --muted: #5b5b66; --faint: #c9c9d1; --line: #e0e0e6;
+    --accent: #0061e0; --accent-fg: #ffffff; --code: #f0f0f4;
+    --font: system-ui, -apple-system, "Segoe UI", Roboto, Ubuntu, Cantarell, "Noto Sans", sans-serif;
+    --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1b22; --surface: #2b2a33; --fg: #fbfbfe; --muted: #a5a4b0; --faint: #4d4c57; --line: #3a3944;
+      --accent: #00ddff; --accent-fg: #15141a; --code: #2b2a33; color-scheme: dark;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--fg); font: 16px/1.6 var(--font); -webkit-font-smoothing: antialiased; }
+  .wrap { max-width: 880px; margin: 0 auto; padding: 56px max(20px, env(safe-area-inset-left)) 72px; display: grid; gap: 64px; }
+  header { display: grid; gap: 20px; justify-items: start; }
+  .brand { display: flex; align-items: center; gap: 14px; }
+  .brand img { width: 44px; height: 44px; }
+  h1 { font-size: 34px; line-height: 1.1; margin: 0; letter-spacing: -.02em; }
+  .lead { font-size: 20px; color: var(--muted); margin: 0; max-width: 34em; text-wrap: balance; }
+  .downloads { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+  .btn { display: inline-flex; align-items: center; gap: 10px; padding: 11px 20px; border-radius: 8px; font-weight: 600; text-decoration: none;
+    border: 1px solid var(--line); background: var(--surface); color: var(--fg); }
+  .btn.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-fg); }
+  .btn:hover { filter: brightness(1.05); }
+  .btn:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+  .btn small { font-weight: 400; opacity: .8; }
+  .meta { font-size: 14px; color: var(--muted); margin: 0; }
+  .meta a { color: inherit; }
+  figure { margin: 0; }
+  figure img { width: 100%; height: auto; display: block; border-radius: 12px; border: 1px solid var(--line); }
+  figcaption { font-size: 14px; color: var(--muted); margin-top: 10px; }
+  h2 { font-size: 22px; margin: 0 0 16px; letter-spacing: -.01em; }
+  .points { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 24px 32px; }
+  .points h3 { font-size: 16px; margin: 0 0 4px; }
+  .points p { margin: 0; color: var(--muted); }
+  .tabs { display: inline-flex; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; margin-bottom: 20px; }
+  .tabs button { font: inherit; font-size: 15px; border: 0; background: var(--surface); color: var(--fg); padding: 8px 16px; cursor: pointer; }
+  .tabs button + button { border-left: 1px solid var(--line); }
+  .tabs button[aria-selected="true"] { background: var(--accent); color: var(--accent-fg); }
+  ol.steps { margin: 0; padding-left: 1.3em; display: grid; gap: 8px; max-width: 40em; }
+  code, kbd { font-family: var(--mono); font-size: .88em; background: var(--code); border-radius: 4px; padding: 1px 5px; }
+  kbd { border: 1px solid var(--line); }
+  .note { color: var(--muted); font-size: 15px; max-width: 40em; margin: 16px 0 0; }
+  footer { font-size: 14px; color: var(--muted); border-top: 1px solid var(--line); padding-top: 20px; display: flex; flex-wrap: wrap; gap: 8px 24px; }
+  footer a { color: inherit; }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<main class="wrap">
+  <header>
+    <div class="brand"><img src="assets/icon.svg" alt=""><h1>QRbeam</h1></div>
+    <p class="lead">Click the QR icon next to the address bar and the current page becomes one large address and QR code. Made for projectors and classrooms.</p>
+    <div class="downloads" id="downloads">
+      <a class="btn" id="dl-firefox" href="qrbeam-firefox.xpi">Add to Firefox</a>
+      <a class="btn" id="dl-chrome" href="https://github.com/wi-wissen/qrbeam/releases/latest/download/qrbeam-chrome.zip">Download for Chrome <small>Edge, Brave, Vivaldi, Opera</small></a>
+    </div>
+    <p class="meta" id="version">Free and open source. <a href="https://github.com/wi-wissen/qrbeam/releases">All releases</a></p>
+  </header>
+
+  <figure>
+    <picture>
+      <source srcset="assets/preview-dark.png" media="(prefers-color-scheme: dark)">
+      <img src="assets/preview-light.png" width="1280" height="720" alt="QRbeam overlay showing the address example.org/projekttage-2026/anmeldung and a large QR code">
+    </picture>
+    <figcaption>Tracking parameters like <code>utm_source</code> are already gone. “Shorten link” turns the address into an is.gd link when it is too long to type.</figcaption>
+  </figure>
+
+  <section>
+    <h2>What it does</h2>
+    <div class="points">
+      <div><h3>One click</h3><p>Click the icon or press <kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>Q</kbd>. Press <kbd>Esc</kbd> to go back to the page.</p></div>
+      <div><h3>Readable from the back row</h3><p>The address is large, the <code>https://</code> stays pale, and the QR code fills the rest of the screen.</p></div>
+      <div><h3>Clean links</h3><p>Removes tracking parameters. Amazon becomes <code>amazon.de/dp/…</code>, YouTube becomes <code>youtu.be/…</code>.</p></div>
+      <div><h3>Private by default</h3><p>Nothing leaves your computer unless you press “Shorten link”. Then only that address is sent to is.gd.</p></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Install</h2>
+    <div class="tabs" role="tablist">
+      <button role="tab" id="tab-firefox" aria-selected="true" aria-controls="panel-firefox">Firefox</button>
+      <button role="tab" id="tab-chrome" aria-selected="false" aria-controls="panel-chrome">Chrome, Edge, Brave</button>
+    </div>
+    <div id="panel-firefox" role="tabpanel" aria-labelledby="tab-firefox">
+      <ol class="steps">
+        <li>Click <strong>Add to Firefox</strong> above.</li>
+        <li>Firefox asks whether this site may install add-ons. Click <strong>Continue to installation</strong>, then <strong>Add</strong>.</li>
+        <li>The QR icon appears inside the address bar on every web page.</li>
+      </ol>
+      <p class="note">QRbeam is signed by Mozilla and updates itself. It is not listed on addons.mozilla.org.</p>
+    </div>
+    <div id="panel-chrome" role="tabpanel" aria-labelledby="tab-chrome" hidden>
+      <ol class="steps">
+        <li>Download the ZIP above and unzip it into a folder you keep, for example <code>Documents/QRbeam</code>.</li>
+        <li>Open <code>chrome://extensions</code> (Edge: <code>edge://extensions</code>, Brave: <code>brave://extensions</code>).</li>
+        <li>Turn on <strong>Developer mode</strong>.</li>
+        <li>Click <strong>Load unpacked</strong> and select the folder.</li>
+        <li>Click the puzzle icon in the toolbar and pin <strong>QRbeam</strong>. It now sits right next to the address bar.</li>
+      </ol>
+      <p class="note">Chrome does not update extensions installed this way. To update, unzip the new version into the same folder and click the reload arrow on the extensions page.</p>
+    </div>
+  </section>
+
+  <footer>
+    <span>MIT License</span>
+    <a href="https://github.com/wi-wissen/qrbeam">Source code on GitHub</a>
+    <a href="https://github.com/wi-wissen/qrbeam/issues">Report a problem</a>
+  </footer>
+</main>
+<script>
+  (function () {
+    var isFirefox = /\bFirefox\//.test(navigator.userAgent);
+    var ff = document.getElementById('dl-firefox');
+    var cr = document.getElementById('dl-chrome');
+    var first = isFirefox ? ff : cr;
+    first.classList.add('primary');
+    first.parentNode.insertBefore(first, first.parentNode.firstChild);
+
+    var tabs = ['firefox', 'chrome'];
+    function select(name) {
+      tabs.forEach(function (t) {
+        document.getElementById('tab-' + t).setAttribute('aria-selected', String(t === name));
+        document.getElementById('panel-' + t).hidden = t !== name;
+      });
+    }
+    tabs.forEach(function (t) {
+      document.getElementById('tab-' + t).addEventListener('click', function () { select(t); });
+    });
+    select(isFirefox ? 'firefox' : 'chrome');
+
+    fetch('latest.json', { cache: 'no-cache' })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (data) {
+        var el = document.getElementById('version');
+        if (data && data.version) {
+          el.firstChild.textContent = 'Version ' + data.version + ' · Free and open source. ';
+        } else {
+          document.getElementById('downloads').hidden = true;
+          el.firstChild.textContent = 'The first release is on its way. ';
+        }
+      })
+      .catch(function () {});
+  })();
+</script>
+</body>
+</html>

@@ -1,0 +1,21 @@
+{
+  "manifest_version": 3,
+  "name": "__MSG_extName__",
+  "short_name": "QRbeam",
+  "description": "__MSG_extDescription__",
+  "version": "0.0.0",
+  "default_locale": "en",
+  "homepage_url": "https://wi-wissen.github.io/qrbeam/",
+  "icons": {
+    "48": "icons/icon-48.png",
+    "96": "icons/icon-96.png",
+    "128": "icons/icon-128.png"
+  },
+  "permissions": ["activeTab", "scripting", "storage"],
+  "commands": {
+    "toggle-overlay": {
+      "suggested_key": { "default": "Alt+Shift+Q" },
+      "description": "__MSG_actionTitle__"
+    }
+  }
+}

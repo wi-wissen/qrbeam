@@ -1,0 +1,17 @@
+{
+  "background": { "scripts": ["background.js"] },
+  "icons": { "48": "icons/icon.svg", "96": "icons/icon.svg" },
+  "page_action": {
+    "default_title": "__MSG_actionTitle__",
+    "default_icon": "icons/page-action.svg",
+    "show_matches": ["http://*/*", "https://*/*"]
+  },
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "qrbeam@wi-wissen.github.io",
+      "strict_min_version": "140.0",
+      "update_url": "https://wi-wissen.github.io/qrbeam/updates.json",
+      "data_collection_permissions": { "required": ["browsingActivity"] }
+    }
+  }
+}

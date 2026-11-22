@@ -1,0 +1,18 @@
+{
+  "name": "qrbeam",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Show the current address as a large QR code for projectors.",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "test": "node --test",
+    "build": "node scripts/build.mjs",
+    "lint": "web-ext lint --source-dir dist/firefox --self-hosted",
+    "icons": "node scripts/icons.mjs",
+    "screenshots": "node scripts/screenshots.mjs"
+  },
+  "devDependencies": {
+    "web-ext": "10.8.0"
+  }
+}
