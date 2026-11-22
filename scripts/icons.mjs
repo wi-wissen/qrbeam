@@ -6,10 +6,10 @@ import { createRequire } from 'node:module';
 const require = createRequire(import.meta.url);
 const OUT = new URL('../src/icons/', import.meta.url);
 
-// 16x16 grid: three finder marks (6x6, 1.25 ring, 1.5 dot) and a 2x2 block of 2.5px squares.
+// 16x16 grid: three finder marks (6x6, 1.5 ring, 1.5 dot) and a 2x2 block of 2.5px squares.
 function glyph(fill) {
   const finder = (x, y) =>
-    `<path fill-rule="evenodd" d="M${x} ${y}h6v6h-6z M${x + 1.25} ${y + 1.25}v3.5h3.5v-3.5z"/>` +
+    `<path fill-rule="evenodd" d="M${x} ${y}h6v6h-6z M${x + 1.5} ${y + 1.5}v3h3v-3z"/>` +
     `<rect x="${x + 2.25}" y="${y + 2.25}" width="1.5" height="1.5"/>`;
   return `<g fill="${fill}">${finder(1, 1)}${finder(9, 1)}${finder(1, 9)}` +
     '<rect x="9" y="9" width="2.5" height="2.5"/><rect x="12.5" y="9" width="2.5" height="2.5"/>' +
@@ -22,8 +22,8 @@ const svg = (body, size = 16) =>
 // Firefox address bar: follows the browser's light/dark appearance.
 const pageAction =
   '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">' +
-  '<style>g{fill:#5b5b66}@media (prefers-color-scheme:dark){g{fill:#fbfbfe}}</style>' +
-  glyph('#5b5b66').replace(' fill="#5b5b66"', '') + '</svg>\n';
+  '<style>g{fill:#2a292e}@media (prefers-color-scheme:dark){g{fill:#fbfbfe}}</style>' +
+  glyph('#2a292e').replace(' fill="#2a292e"', '') + '</svg>\n';
 
 // App icon for extension managers: dark glyph on a white rounded tile.
 const app = svg(

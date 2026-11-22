@@ -76,12 +76,14 @@
     const extra = new Set();
     for (const rule of PER_HOST) if (onAny(host, rule.hosts)) rule.keys.forEach((k) => extra.add(k));
 
-    for (const key of [...u.searchParams.keys()]) {
-      if (DROP.has(key) || extra.has(key) || DROP_PREFIX.some((p) => key.startsWith(p))) {
-        u.searchParams.delete(key);
-      }
-    }
-    if ([...u.searchParams.keys()].length === 0) u.search = '';
+    // forEach instead of spreading the iterator: Firefox content scripts see
+    // URLSearchParams through an Xray wrapper whose iterators are not iterable.
+    const drop = [];
+    u.searchParams.forEach((value, key) => {
+      if (DROP.has(key) || extra.has(key) || DROP_PREFIX.some((p) => key.startsWith(p))) drop.push(key);
+    });
+    drop.forEach((key) => u.searchParams.delete(key));
+    if (u.searchParams.toString() === '') u.search = '';
     return u.href;
   }
 

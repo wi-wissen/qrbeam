@@ -1,14 +1,56 @@
 {
-  "extName": { "message": "QRbeam" },
-  "extDescription": { "message": "Zeigt die Adresse des aktuellen Tabs als großen QR-Code. Gemacht für den Beamer." },
-  "actionTitle": { "message": "Adresse als QR-Code zeigen" },
-  "dialogLabel": { "message": "Adresse und QR-Code" },
-  "shorten": { "message": "Link kürzen" },
-  "shortening": { "message": "Kürze …" },
-  "shortenFailed": { "message": "Kürzen nicht möglich" },
-  "undo": { "message": "Rückgängig" },
-  "close": { "message": "Schließen" },
-  "escToClose": { "message": "schließen" },
-  "qrLabel": { "message": "QR-Code" },
-  "noAddress": { "message": "Diese Seite hat keine Adresse, die sich teilen lässt." }
+  "extName": {
+    "message": "QRbeam"
+  },
+  "extDescription": {
+    "message": "Zeigt die Adresse des aktuellen Tabs als großen QR-Code. Gemacht für den Beamer."
+  },
+  "actionTitle": {
+    "message": "Adresse als QR-Code zeigen"
+  },
+  "dialogLabel": {
+    "message": "Adresse und QR-Code"
+  },
+  "shorten": {
+    "message": "Link kürzen"
+  },
+  "shortening": {
+    "message": "Kürze …"
+  },
+  "shortenFailed": {
+    "message": "Kürzen nicht möglich"
+  },
+  "undo": {
+    "message": "Rückgängig"
+  },
+  "close": {
+    "message": "Schließen"
+  },
+  "escToClose": {
+    "message": "schließen"
+  },
+  "qrLabel": {
+    "message": "QR-Code"
+  },
+  "noAddress": {
+    "message": "Diese Seite hat keine Adresse, die sich teilen lässt."
+  },
+  "waitingForPermission": {
+    "message": "Warte auf Erlaubnis …"
+  },
+  "consentTitle": {
+    "message": "Link-Kürzen erlauben?"
+  },
+  "consentText": {
+    "message": "Zum Kürzen schickt QRbeam die angezeigte Adresse an den kostenlosen Dienst is.gd. Sonst wird nichts übertragen, und auch das nur, wenn du auf „Link kürzen“ klickst."
+  },
+  "consentOnce": {
+    "message": "Firefox fragt das einmalig. Du kannst die Erlaubnis jederzeit unter Add-ons und Themes → QRbeam → Berechtigungen zurücknehmen."
+  },
+  "consentAllow": {
+    "message": "Erlauben"
+  },
+  "consentDeny": {
+    "message": "Jetzt nicht"
+  }
 }

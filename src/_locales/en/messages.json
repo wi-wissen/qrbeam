@@ -1,14 +1,56 @@
 {
-  "extName": { "message": "QRbeam" },
-  "extDescription": { "message": "Shows the address of the current tab as a large QR code. Made for projectors." },
-  "actionTitle": { "message": "Show address as QR code" },
-  "dialogLabel": { "message": "Address and QR code" },
-  "shorten": { "message": "Shorten link" },
-  "shortening": { "message": "Shortening…" },
-  "shortenFailed": { "message": "Couldn’t shorten link" },
-  "undo": { "message": "Undo" },
-  "close": { "message": "Close" },
-  "escToClose": { "message": "to close" },
-  "qrLabel": { "message": "QR code" },
-  "noAddress": { "message": "This page has no address that can be shared." }
+  "extName": {
+    "message": "QRbeam"
+  },
+  "extDescription": {
+    "message": "Shows the address of the current tab as a large QR code. Made for projectors."
+  },
+  "actionTitle": {
+    "message": "Show address as QR code"
+  },
+  "dialogLabel": {
+    "message": "Address and QR code"
+  },
+  "shorten": {
+    "message": "Shorten link"
+  },
+  "shortening": {
+    "message": "Shortening…"
+  },
+  "shortenFailed": {
+    "message": "Couldn’t shorten link"
+  },
+  "undo": {
+    "message": "Undo"
+  },
+  "close": {
+    "message": "Close"
+  },
+  "escToClose": {
+    "message": "to close"
+  },
+  "qrLabel": {
+    "message": "QR code"
+  },
+  "noAddress": {
+    "message": "This page has no address that can be shared."
+  },
+  "waitingForPermission": {
+    "message": "Waiting for permission…"
+  },
+  "consentTitle": {
+    "message": "Allow link shortening?"
+  },
+  "consentText": {
+    "message": "To shorten a link, QRbeam sends the address shown on screen to the free service is.gd. Nothing else is sent, and only when you click “Shorten link”."
+  },
+  "consentOnce": {
+    "message": "Firefox asks for this once. You can withdraw it at any time under Add-ons and themes → QRbeam → Permissions."
+  },
+  "consentAllow": {
+    "message": "Allow"
+  },
+  "consentDeny": {
+    "message": "Not now"
+  }
 }
