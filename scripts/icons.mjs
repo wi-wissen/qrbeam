@@ -6,14 +6,15 @@ import { createRequire } from 'node:module';
 const require = createRequire(import.meta.url);
 const OUT = new URL('../src/icons/', import.meta.url);
 
-// 16x16 grid: three finder marks (6x6, 1.5 ring, 1.5 dot) and a 2x2 block of 2.5px squares.
+// 16x16 pixel grid, every edge on a whole pixel so the icon stays crisp at 1x:
+// three finder marks (6x6 with a 2px ring) and five 2px modules in a dice pattern,
+// matching the 2px weight of the browser's own toolbar icons.
 function glyph(fill) {
   const finder = (x, y) =>
-    `<path fill-rule="evenodd" d="M${x} ${y}h6v6h-6z M${x + 1.5} ${y + 1.5}v3h3v-3z"/>` +
-    `<rect x="${x + 2.25}" y="${y + 2.25}" width="1.5" height="1.5"/>`;
+    `<path fill-rule="evenodd" d="M${x + 1} ${y}h4a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1v-4a1 1 0 0 1 1-1z M${x + 2} ${y + 2}v2h2v-2z"/>`;
+  const mod = (x, y) => `<rect x="${x}" y="${y}" width="2" height="2"/>`;
   return `<g fill="${fill}">${finder(1, 1)}${finder(9, 1)}${finder(1, 9)}` +
-    '<rect x="9" y="9" width="2.5" height="2.5"/><rect x="12.5" y="9" width="2.5" height="2.5"/>' +
-    '<rect x="9" y="12.5" width="2.5" height="2.5"/><rect x="12.5" y="12.5" width="2.5" height="2.5"/></g>';
+    mod(9, 9) + mod(13, 9) + mod(11, 11) + mod(9, 13) + mod(13, 13) + '</g>';
 }
 
 const svg = (body, size = 16) =>

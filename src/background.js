@@ -39,9 +39,10 @@ const needsConsent = typeof api.runtime.getBrowserInfo === 'function';
 async function hasConsent() {
   if (!needsConsent) return true;
   try {
-    return await api.permissions.contains(CONSENT);
+    const all = await api.permissions.getAll();
+    return Array.isArray(all.data_collection) && all.data_collection.includes('browsingActivity');
   } catch {
-    return true; // Firefox without data consent support
+    return false; // when in doubt, ask
   }
 }
 

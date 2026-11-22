@@ -28,7 +28,7 @@
   const ICON_SCISSORS = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><circle cx="4" cy="4.5" r="2"/><circle cx="4" cy="11.5" r="2"/><path d="M5.7 5.6 14 12M5.7 10.4 14 4"/></svg>';
   const ICON_CLOSE = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="m3 3 10 10M13 3 3 13"/></svg>';
 
-  // One spacing unit (--u) drives the layout. The row under the address has a
+  // One spacing unit (--s) drives the layout. The row under the address has a
   // fixed height, so the QR code never jumps when the link gets shortened.
   const CSS = `
 :host{all:initial}
@@ -44,22 +44,24 @@
   .root{--bg:#1c1b22; --fg:#fbfbfe; --faint:#4d4c57; --muted:#a5a4b0; --btn:rgba(251,251,254,.09); --btn-hover:rgba(251,251,254,.15); --focus:#00ddff; --tile-shadow:none; color-scheme:dark}
   .root.cr{--bg:#202124; --fg:#e8eaed; --faint:#4a4c50; --muted:#9aa0a6; --focus:#a8c7fa}
 }
-.ov{--u:2.6cqh;position:absolute;inset:0;background:var(--bg);color:var(--fg);box-sizing:border-box;
-  display:grid;grid-template-rows:auto minmax(0,1fr) auto;justify-items:center;gap:calc(var(--u)*1.6);
-  padding:calc(var(--u)*2.2) calc(var(--u)*3) calc(var(--u)*1.2);animation:fade .14s ease-out;outline:none}
+.ov{--s:2.4cqh;position:absolute;inset:0;background:var(--bg);color:var(--fg);box-sizing:border-box;
+  display:grid;grid-template-rows:auto auto minmax(0,1fr) auto;justify-items:center;
+  padding:calc(var(--s)*3) calc(var(--s)*4) calc(var(--s)*1.5);animation:fade .14s ease-out;outline:none}
 @keyframes fade{from{opacity:0;transform:scale(.992)}to{opacity:1;transform:none}}
-.head{display:grid;justify-items:center;gap:calc(var(--u)*1.5);max-width:100%;min-width:0}
-.url{font-size:min(3.6cqw,7cqh);line-height:1.2;font-weight:450;text-align:center;max-width:100%;overflow-wrap:anywhere;
-  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;letter-spacing:-.005em;
-  transition:opacity .18s ease,filter .18s ease,transform .18s ease}
+.head{display:contents}
+.url{font-family:ui-monospace,"Cascadia Mono","Segoe UI Mono","SF Mono","Roboto Mono","Liberation Mono","DejaVu Sans Mono",Menlo,Consolas,monospace;
+  font-size:min(3.1cqw,6.2cqh);line-height:1.3;padding-block:.06em;font-weight:450;text-align:center;max-width:100%;overflow-wrap:anywhere;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;letter-spacing:0;
+  font-variant-ligatures:none;transition:opacity .18s ease,filter .18s ease,transform .18s ease}
 .url.out{opacity:0;filter:blur(6px);transform:translateY(-.25em) scale(.98)}
 .url.pre{opacity:0;filter:blur(6px);transform:translateY(.25em) scale(.98);transition:none}
 .scheme{color:var(--faint);font-weight:400}
-.host{font-weight:650}
+.host{font-weight:700}
 .path{opacity:.8}
 .empty{font-size:min(2.4cqw,5cqh);color:var(--muted);text-align:center}
-.meta{height:min(3.6cqh,2.2cqw);min-height:22px;display:flex;align-items:center;gap:1.2cqw;font-size:max(12px,min(1.45cqw,2.8cqh));color:var(--muted);max-width:100%;min-width:0}
-.orig{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.meta{margin-top:var(--s);height:calc(var(--s)*1.7);min-height:24px;display:flex;align-items:center;justify-content:center;gap:1.2cqw;
+  font-size:max(12px,min(1.45cqw,2.8cqh));color:var(--muted);max-width:100%;min-width:0}
+.orig{font-family:ui-monospace,"Cascadia Mono","Segoe UI Mono","SF Mono","Roboto Mono","Liberation Mono","DejaVu Sans Mono",Menlo,Consolas,monospace;font-size:.95em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
 .orig[hidden]{display:none}
 button{font:inherit;color:inherit}
 .pill{font-size:inherit;display:inline-flex;align-items:center;gap:.5em;border:0;border-radius:999px;padding:.35em .95em;
@@ -72,14 +74,14 @@ button{font:inherit;color:inherit}
 .pill[disabled]{cursor:default}
 .spin{width:1em;height:1em;box-sizing:border-box;border-radius:50%;border:2px solid var(--faint);border-top-color:var(--fg);animation:sp .7s linear infinite}
 @keyframes sp{to{transform:rotate(360deg)}}
-.qr{min-height:0;height:100%;width:100%;display:flex;align-items:center;justify-content:center}
+.qr{margin-top:calc(var(--s)*2);min-height:0;align-self:stretch;width:100%;display:flex;align-items:center;justify-content:center}
 .tile{height:100%;aspect-ratio:1;max-width:100%;background:#ffffff;border-radius:min(3.2cqh,1.8cqw);box-sizing:border-box;
   padding:min(2.4cqh,1.35cqw);overflow:hidden;box-shadow:var(--tile-shadow);transition:opacity .2s ease}
 .tile.dim{opacity:.15}
 .tile svg{width:100%;height:100%;display:block}
-.foot{font-size:max(11px,min(1.2cqw,2.4cqh));color:var(--muted)}
+.foot{margin-top:calc(var(--s)*1.5);font-size:max(11px,min(1.2cqw,2.4cqh));color:var(--muted)}
 kbd{font:inherit;border:1px solid var(--faint);border-radius:.3em;padding:0 .4em}
-.x{position:absolute;top:calc(var(--u)*1.2);right:calc(var(--u)*1.2);width:min(4cqw,7cqh);height:min(4cqw,7cqh);min-width:28px;min-height:28px;
+.x{position:absolute;top:calc(var(--s)*1.5);right:calc(var(--s)*1.5);width:min(4cqw,7cqh);height:min(4cqw,7cqh);min-width:28px;min-height:28px;
   border-radius:50%;border:0;background:var(--btn);color:var(--fg);cursor:pointer;display:grid;place-items:center;padding:0}
 .x:hover{background:var(--btn-hover)}
 .x svg{width:40%;height:40%}
