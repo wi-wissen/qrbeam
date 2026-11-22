@@ -54,7 +54,8 @@ On pages where browsers forbid extensions (settings pages, the extension stores,
 
 - QRbeam reads the address of the current tab only when you click its icon or press the shortcut.
 - The QR code is generated locally.
-- Pressing **Shorten link** sends the shown address to [is.gd](https://is.gd/privacy.php). Nothing else is ever sent anywhere. Firefox lists this as “browsing activity” in its install dialog.
+- Pressing **Shorten link** sends the shown address to [is.gd](https://is.gd/privacy.php). Nothing else is ever sent anywhere.
+- Firefox asks for permission the first time you press **Shorten link** (data category “browsing activity”). Installing QRbeam itself asks for no data permissions. You can withdraw the permission under `about:addons` → QRbeam → **Permissions**.
 - Permissions: `activeTab`, `scripting`, `storage` (to remember short links for the session), and in Chromium `offscreen` (to match the toolbar icon to light or dark mode).
 
 ## Development
@@ -76,6 +77,7 @@ src/                 extension source (plain JavaScript, no framework)
   overlay.js         the projector view (shadow DOM)
   clean.js           tracking parameter rules
   view.html          fallback page for tabs that block extensions
+  consent.html       Firefox: one-time permission for link shortening
   vendor/qrcode.js   QR code generator by Kazuhiko Arase (MIT)
 manifest/            base manifest plus Chrome and Firefox additions
 scripts/             build, icons, screenshots, Pages data

@@ -19,6 +19,7 @@
     escToClose: 'to close',
     qrLabel: 'QR code',
     noAddress: 'This page has no address that can be shared.',
+    waitingForPermission: 'Waiting for permission…',
   };
   const t = (key) => {
     try { return api?.i18n?.getMessage(key) || FALLBACK[key] || key; } catch { return FALLBACK[key] || key; }
@@ -226,6 +227,14 @@ kbd{font:inherit;border:1px solid var(--faint);border-radius:.3em;padding:0 .4em
       paint();
       const res = await requestShort(cleaned);
       if (state !== 'loading') return;
+      if (res.consent) {
+        // Firefox: the first shortening needs the user's permission, asked in a small window.
+        state = 'consent';
+        btn.replaceChildren(span('spin'), span(null, t('waitingForPermission')));
+        btn.disabled = true;
+        api.runtime.sendMessage({ type: 'qrbeam:ask-consent' }).catch(() => {});
+        return;
+      }
       if (res.ok && shareable(res.short)) {
         shortUrl = res.short;
         swap('short');
@@ -238,10 +247,22 @@ kbd{font:inherit;border:1px solid var(--faint);border-radius:.3em;padding:0 .4em
     });
     $('.x').addEventListener('click', () => onClose());
 
+    const onConsent = (msg) => {
+      if (!msg || msg.type !== 'qrbeam:consent-result' || state !== 'consent') return;
+      state = 'long';
+      btn.disabled = false;
+      paint();
+      if (msg.granted) btn.click();
+    };
+    api?.runtime?.onMessage?.addListener(onConsent);
+
     paint();
     ov.focus({ preventScroll: true });
 
-    return () => clearTimeout(timer);
+    return () => {
+      clearTimeout(timer);
+      api?.runtime?.onMessage?.removeListener(onConsent);
+    };
   }
 
   // ---------- in-page overlay ----------

@@ -12,7 +12,7 @@ if (!/^\d+\.\d+\.\d+$/.test(version)) {
 
 const ONLY = {
   chrome: ['offscreen.html', 'offscreen.js', 'icons/toolbar-light-16.png', 'icons/toolbar-light-32.png', 'icons/toolbar-dark-16.png', 'icons/toolbar-dark-32.png'],
-  firefox: ['icons/page-action.svg', 'icons/icon.svg'],
+  firefox: ['icons/page-action.svg', 'icons/icon.svg', 'consent.html', 'consent.js'],
 };
 const ALWAYS_SKIP = ['icons/toolbar-light.svg', 'icons/toolbar-dark.svg'];
 
