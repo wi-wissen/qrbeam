@@ -49,7 +49,7 @@ async function hasConsent() {
 async function askConsent(tab) {
   const url = api.runtime.getURL('consent.html') + '?tab=' + tab.id;
   try {
-    await api.windows.create({ url, type: 'popup', width: 460, height: 400 });
+    await api.windows.create({ url, type: 'popup', width: 460, height: 340 });
   } catch {
     await api.tabs.create({ url, index: tab.index + 1, openerTabId: tab.id });
   }
