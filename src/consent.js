@@ -13,11 +13,14 @@ async function done(granted) {
 }
 
 document.getElementById('allow').addEventListener('click', async () => {
+  const wanted = { data_collection: ['browsingActivity'] };
   let granted = false;
   try {
-    granted = await api.permissions.request({ data_collection: ['browsingActivity'] });
+    // permissions.request must be the first await after the click, or Firefox
+    // no longer treats it as a user action. contains() is only a fallback.
+    granted = await api.permissions.request(wanted);
   } catch {
-    granted = false;
+    granted = await api.permissions.contains(wanted).catch(() => false);
   }
   done(granted);
 });

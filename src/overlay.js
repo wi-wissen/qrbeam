@@ -145,7 +145,8 @@ kbd{font:inherit;border:1px solid var(--faint);border-radius:.3em;padding:0 .4em
     if (!api?.runtime?.sendMessage) return { ok: false };
     try {
       const res = await api.runtime.sendMessage({ type: 'qrbeam:shorten', url });
-      return res && res.ok ? res : { ok: false };
+      // Pass the reply through unchanged: { consent: true } means Firefox needs permission first.
+      return res && typeof res === 'object' ? res : { ok: false };
     } catch {
       return { ok: false };
     }
@@ -160,11 +161,11 @@ kbd{font:inherit;border:1px solid var(--faint);border-radius:.3em;padding:0 .4em
     root.className = 'root' + (isFirefox ? '' : ' cr');
     root.innerHTML =
       '<div class="ov" role="dialog" aria-modal="true" tabindex="-1">' +
-        '<button class="x" type="button"></button>' +
         '<div class="head"><div class="url" aria-live="polite"></div>' +
           '<div class="meta"><span class="orig" hidden></span><button class="pill" type="button"></button></div></div>' +
         '<div class="qr"><div class="tile"></div></div>' +
         '<div class="foot"><kbd>Esc</kbd> <span class="esc"></span></div>' +
+        '<button class="x" type="button"></button>' +
       '</div>';
     shadow.append(style, root);
 
@@ -279,21 +280,34 @@ kbd{font:inherit;border:1px solid var(--faint);border-radius:.3em;padding:0 .4em
     ].map((d) => d + ' !important').join(';'));
     const shadow = host.attachShadow({ mode: 'closed' });
 
-    const cleanup = render(shadow, location.href, close);
-    const onKey = (e) => {
-      if (e.key === 'Escape') {
-        e.preventDefault();
-        e.stopImmediatePropagation();
-        close();
-      }
-    };
-    window.addEventListener('keydown', onKey, true);
+    // Attach first: focus only works on connected elements.
     document.documentElement.append(host);
     // The top layer keeps the overlay above page dialogs and fullscreen elements.
     if (typeof host.showPopover === 'function') {
       host.setAttribute('popover', 'manual');
       try { host.showPopover(); } catch { /* not connected or unsupported */ }
     }
+    const cleanup = render(shadow, location.href, close);
+
+    const onKey = (e) => {
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        close();
+        return;
+      }
+      if (e.key === 'Tab') {
+        // Keep keyboard focus inside the overlay instead of the page behind it.
+        const items = [...shadow.querySelectorAll('button')].filter((b) => !b.disabled && b.offsetParent !== null);
+        if (!items.length) return;
+        const i = items.indexOf(shadow.activeElement);
+        const next = e.shiftKey ? (i <= 0 ? items.length - 1 : i - 1) : (i === -1 || i === items.length - 1 ? 0 : i + 1);
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        items[next].focus();
+      }
+    };
+    window.addEventListener('keydown', onKey, true);
 
     current = { host, cleanup, onKey, previousFocus };
   }
